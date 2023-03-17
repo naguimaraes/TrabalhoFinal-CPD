@@ -11,8 +11,6 @@
 using aria::csv::CsvParser;
 using namespace std;
 
-// oi natã aabluble
-// Testando git
 
 int main(void){
 
