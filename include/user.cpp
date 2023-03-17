@@ -31,3 +31,35 @@ vector<RatedPlayer> User::getRatedPlayerVector()
 {
     return rated_player_vector;
 }
+
+int User::partition(int left, int right){
+    int i, j;
+    RatedPlayer key;
+    key = rated_player_vector[left];
+    i = left; 
+    j = right;
+
+    while (i<j) {
+        while(rated_player_vector[j].player_rating < key.player_rating && i < j) j--;
+        {
+            rated_player_vector[i] = rated_player_vector[j];
+        }
+        while(rated_player_vector[i].player_rating >= key.player_rating && i < j) i++ ;
+        {
+            rated_player_vector[j] = rated_player_vector[i];
+        }
+    }
+    rated_player_vector[j] = key;
+    return i;
+
+}
+
+void User::sortRatedPlayerVector(int left, int right){
+    if (left < right) {
+
+        int pi = partition(left, right);
+  
+        sortRatedPlayerVector(left, pi - 1);
+        sortRatedPlayerVector(pi + 1, right);
+    }
+}

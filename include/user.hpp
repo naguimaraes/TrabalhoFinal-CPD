@@ -17,6 +17,7 @@ private:
     int id{0};
     RatedPlayer buffer_rated_player;
     vector<RatedPlayer> rated_player_vector;
+    int partition(int left, int right);
 
 public:
 
@@ -26,6 +27,7 @@ public:
     void setRatedPlayer(int player_id, float player_rating);
     vector<RatedPlayer> getRatedPlayerVector();
     RatedPlayer getRatedPlayerBuffer();
+    void sortRatedPlayerVector(int left, int right);
 };
 
 

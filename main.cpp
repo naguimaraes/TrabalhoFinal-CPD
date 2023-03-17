@@ -24,7 +24,7 @@ int main(void){
     Trie player_trie = Trie();
 
     ifstream players_file("data/players.csv");
-    ifstream ratings_file("data/rating.csv");
+    ifstream ratings_file("data/minirating.csv");
 
     CsvParser parser_players(players_file);
     CsvParser parser_ratings(ratings_file);
@@ -140,9 +140,11 @@ int main(void){
         }
         else if(!(input_string.substr(0, 4).compare("user"))){
             int user_id = stoi(input_string.substr(5));
+            int vector_size = user_hash.search(user_id)->getRatedPlayerVector().size();
+            user_hash.search(user_id)->sortRatedPlayerVector(0, vector_size-1);
+
             vector<RatedPlayer> ratings_vector = (user_hash.search(user_id)->getRatedPlayerVector());
 
-            // ORDENAR POR USER RATING
             if(ratings_vector.size() !=  0){
 
                 cout << "\n";
