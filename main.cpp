@@ -11,6 +11,8 @@
 using aria::csv::CsvParser;
 using namespace std;
 
+// oi natã aabluble
+
 int main(void){
 
     int data_stat;
