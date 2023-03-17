@@ -2,7 +2,7 @@
 #include <fstream>
 #include <string>
 #include <iomanip>
-#include "csv/parser.hpp"
+#include "include/parser.hpp"
 #include "include/player.hpp"
 #include "include/hashtable.hpp"
 #include "include/trie.hpp"
