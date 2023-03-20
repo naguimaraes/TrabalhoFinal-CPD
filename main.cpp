@@ -8,7 +8,7 @@
 #include "include/trie.hpp"
 #include "include/user.hpp"
 
-using aria::csv::CsvParser;
+using namespace aria::csv;
 using namespace std;
 
 
@@ -24,7 +24,7 @@ int main(void){
     Trie player_trie = Trie();
 
     ifstream players_file("data/players.csv");
-    ifstream ratings_file("data/minirating.csv");
+    ifstream ratings_file("data/rating.csv");
 
     CsvParser parser_players(players_file);
     CsvParser parser_ratings(ratings_file);
@@ -47,12 +47,14 @@ int main(void){
     };
     data_stat = 0;
 
+    cout << "Building player hash and player trie...\n\n";
+
     for (auto& row : parser_players) {
         Player buffer;
         for (auto& field : row) {
             switch (data_stat){
             case ID: // id
-                buffer.setId(stoi(field));
+                buffer.setId(field);
                 data_stat++;
                 break;
             case NAME: // name
@@ -66,8 +68,10 @@ int main(void){
             }
         }
         player_hash.insert(buffer);
-        player_trie.insert(buffer.getName(), buffer.getId());
+        player_trie.insert(buffer.getName(), stoi(buffer.getId()));
     }
+
+    cout << "Player hash and player trie done!\n\n";
 
     
     // Loop de leitura do rating.csv
@@ -77,31 +81,35 @@ int main(void){
     };
     data_stat = 0;
 
+    cout << "Building user hash...\n\n"; 
+
     for (auto& row : parser_ratings) {
         User user_buffer;
-        int playerId;
+        string playerId;
         float rating;
         for (auto& field : row) {
             switch (data_stat){
             case USER_ID:
-                user_buffer.setId(stoi(field));
+                user_buffer.setId(field);
                 data_stat++;
                 break;
             case PLAYER_ID: 
-                playerId = stoi(field);
+                playerId = field;
                 data_stat++;
                 break;
             case RATING:
                 rating = stof(field);
                 user_buffer.setRatedPlayer(playerId, rating);            
                 player_hash.search(playerId)->addRating(rating);
-                player_hash.search(playerId)->addCount();
                 data_stat = 0;              
                 break;
             }
         }
+        /* cout << "aqui ta ino "<< user_buffer.getId() << endl; */
         user_hash.insert(user_buffer);
     }
+
+    cout << "User hash done!\n\n";
  
 
 
@@ -127,10 +135,10 @@ int main(void){
                 cout << setw(9+48+13+7+6+15) << setfill('-') << "-" << "\n";
                 for(int i = 0; i < player_trie.vector_id.size(); i++){
                     cout << "| " << right << setw(9) << setfill(' ') << player_trie.vector_id[i] << " | ";
-                    cout << left << setw(48) << setfill(' ') << player_hash.search(player_trie.vector_id[i])->getName() << " | ";
-                    cout << left << setw(13) << setfill(' ') << player_hash.search(player_trie.vector_id[i])->getPositions() << " | ";
-                    cout << right << setw(7) << setfill(' ') << player_hash.search(player_trie.vector_id[i])->getRating() << " | ";
-                    cout << right << setw(6) << setfill(' ') << player_hash.search(player_trie.vector_id[i])->getCount() << "|" << "\n";
+                    cout << left << setw(48) << setfill(' ') << player_hash.search(to_string(player_trie.vector_id[i]))->getName() << " | ";
+                    cout << left << setw(13) << setfill(' ') << player_hash.search(to_string(player_trie.vector_id[i]))->getPositions() << " | ";
+                    cout << right << setw(7) << setfill(' ') << player_hash.search(to_string(player_trie.vector_id[i]))->getRating() << " | ";
+                    cout << right << setw(6) << setfill(' ') << player_hash.search(to_string(player_trie.vector_id[i]))->getCount() << "|" << "\n";
                 }
                 cout << setw(9+48+13+7+6+15) << setfill('-') << "-" << "\n" << endl;
             }
@@ -140,10 +148,10 @@ int main(void){
         }
         else if(!(input_string.substr(0, 4).compare("user"))){
             int user_id = stoi(input_string.substr(5));
-            int vector_size = user_hash.search(user_id)->getRatedPlayerVector().size();
-            user_hash.search(user_id)->sortRatedPlayerVector(0, vector_size-1);
+            int vector_size = user_hash.search(to_string(user_id))->getRatedPlayerVector().size();
+            user_hash.search(to_string(user_id))->sortRatedPlayerVector(0, vector_size-1);
 
-            vector<RatedPlayer> ratings_vector = (user_hash.search(user_id)->getRatedPlayerVector());
+            vector<RatedPlayer> ratings_vector = (user_hash.search(to_string(user_id))->getRatedPlayerVector());
 
             if(ratings_vector.size() !=  0){
 
