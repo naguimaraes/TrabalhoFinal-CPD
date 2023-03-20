@@ -2,7 +2,7 @@
 #include "player.hpp"
 using std::string;
 
-int Player::getId(){
+string Player::getId(){
     return id;
 }
 string Player::getName(){
@@ -12,13 +12,19 @@ string Player::getPositions(){
     return pos;
 }
 float Player::getRating(){
-    return rating/count;
+    
+    if(count > 0){
+        return rating/count;
+    }
+    else{
+        return 0;
+    }
 }
 int Player::getCount(){
     return count;
 }
 
-void Player::setId(int player_id)
+void Player::setId(string player_id)
 {
     id = player_id;
 }
@@ -33,7 +39,5 @@ void Player::setPositions(string player_position)
 void Player::addRating(float player_rating)
 {
     rating += player_rating;
-}
-void Player::addCount(){
     count++;
 }
