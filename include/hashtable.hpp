@@ -7,8 +7,6 @@ using std::string, std::vector;
 // base hash class
 class HashTable{
 protected:
-    const int HASH_SIZE = 28416;
-    int getKey(int id, int size);
 };
 
 
@@ -16,9 +14,11 @@ protected:
 class HashPlayer: public HashTable{
 private:
     vector<vector<Player>> hash_table;
+    const int HASH_SIZE = 28416;
 public:
     void insert(Player player);
-    Player* search(int id);
+    Player* search(string id);
+    int getKey(string id, int size);
     HashPlayer();
 };
 
@@ -27,8 +27,10 @@ public:
 class HashUser: public HashTable{
 private:
     vector<vector<User>> hash_table;
+    const int HASH_SIZE = 1.3*24188078;
 public:
     void insert(User user);
-    User* search(int id);
+    User* search(string id);
+    int getKey(string id, int size);
     HashUser();
 };
