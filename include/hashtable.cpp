@@ -53,7 +53,6 @@ Player* HashPlayer::search(string id){
     return NULL;    
 }
 
-// Preenche a hash com vetores vazios
 HashPlayer::HashPlayer(){
     for(int i = 0; i < HASH_SIZE ; i++){
         hash_table.push_back(vector<Player>());

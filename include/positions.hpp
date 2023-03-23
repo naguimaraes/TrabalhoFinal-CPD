@@ -32,6 +32,7 @@ public:
     void sortTopPlayersVector(int left, int right, int positions);
     void getRatings(string position, HashPlayer player_hash);
     vector<TopRatedPlayers> getRatedPlayerVector(string position);
+    bool checkPositions(string position);
     Positions();
 };
 

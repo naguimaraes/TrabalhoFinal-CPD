@@ -90,3 +90,11 @@ vector<TopRatedPlayers> Positions::getRatedPlayerVector(string position)
     return top_positions_vector[key];
 }
 
+bool Positions::checkPositions(string position){
+    if (std::count(positions.begin(), positions.end(), position)){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
