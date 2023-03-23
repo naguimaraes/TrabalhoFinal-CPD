@@ -1,3 +1,6 @@
+#ifndef HASHTABLE_H
+#define HASHTABLE_H 
+
 #include <iostream>
 #include <vector>
 #include "player.hpp"
@@ -34,3 +37,5 @@ public:
     int getKey(string id, int size);
     HashUser();
 };
+
+#endif

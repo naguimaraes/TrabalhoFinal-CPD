@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <iomanip>
+#include "include/positions.hpp"
 #include "include/parser.hpp"
 #include "include/player.hpp"
 #include "include/hashtable.hpp"
@@ -18,10 +19,12 @@ int main(void){
 
     string input_string;
     
-    HashPlayer player_hash = HashPlayer();
-    HashUser user_hash = HashUser();
+    HashPlayer player_hash;
+    HashUser user_hash;
 
-    Trie player_trie = Trie();
+    Trie player_trie;
+
+    Positions top_positions;
 
     ifstream players_file("data/players.csv");
     ifstream ratings_file("data/rating.csv");
@@ -29,7 +32,7 @@ int main(void){
     CsvParser parser_players(players_file);
     CsvParser parser_ratings(ratings_file);
 
-    // Loop para pular o título das colunas no CSV
+    // Loop to skip the CSV's headings
     for (auto& row : parser_players) {
         for (auto& field : row){}
         break;
@@ -40,7 +43,7 @@ int main(void){
     }
 
 
-    // Loop de leitura do players.csv
+    // Loop to read players.csv
     enum player_csv_values
     {
         ID, NAME, POS
@@ -67,6 +70,7 @@ int main(void){
                 break;
             }
         }
+        top_positions.insert(buffer.getId(), buffer.getPositions());
         player_hash.insert(buffer);
         player_trie.insert(buffer.getName(), stoi(buffer.getId()));
     }
@@ -74,7 +78,7 @@ int main(void){
     cout << "Player hash and player trie done!\n\n";
 
     
-    // Loop de leitura do rating.csv
+    // Loop to read rating.csv
     enum rating_csv_values
     {
         USER_ID, PLAYER_ID, RATING
@@ -105,16 +109,13 @@ int main(void){
                 break;
             }
         }
-        /* cout << "aqui ta ino "<< user_buffer.getId() << endl; */
         user_hash.insert(user_buffer);
     }
 
     cout << "User hash done!\n\n";
- 
 
-
-    cout << "Montagem das estruturas finalizada!\n";
-    cout << "Insira a busca a ser feita: ";
+    cout << "All structs have been built!\n";
+    cout << "Insert your search: ";
     getline(cin, input_string, '\n');
 
     while (input_string != "-1"){
@@ -122,7 +123,7 @@ int main(void){
             player_trie.searchPrefix(input_string.substr(7));
 
             if(player_trie.vector_id.size() < 1){
-                cout << "Informe um nome valido!\n" << endl;
+                cout << "Invalid name!\n" << endl;
             }
             else{
                 cout << "\n";
@@ -147,43 +148,92 @@ int main(void){
 
         }
         else if(!(input_string.substr(0, 4).compare("user"))){
-            int user_id = stoi(input_string.substr(5));
-            int vector_size = user_hash.search(to_string(user_id))->getRatedPlayerVector().size();
-            user_hash.search(to_string(user_id))->sortRatedPlayerVector(0, vector_size-1);
+            string user_id = input_string.substr(5);
 
-            vector<RatedPlayer> ratings_vector = (user_hash.search(to_string(user_id))->getRatedPlayerVector());
+            // Tests if the input after "user" only contains integer numbers
+            if(user_id.find_first_not_of("0123456789") == std::string::npos){
+                int vector_size = user_hash.search(user_id)->getRatedPlayerVector().size();
+                user_hash.search(user_id)->sortRatedPlayerVector(0, vector_size-1);
 
-            if(ratings_vector.size() !=  0){
+                vector<RatedPlayer> ratings_vector = (user_hash.search(user_id)->getRatedPlayerVector());
 
-                cout << "\n";
-                cout << setw(7+48+13+5+12+15) << setfill('-') << "-" << "\n";
-                cout << "| " << setw(7) << setfill(' ') << "User ID" << " | ";
-                cout << left << setw(48) << setfill(' ') << "Full Name" << " | ";
-                cout << left << setw(13) << setfill(' ') << "Global Rating" << " | ";
-                cout << left << setw(5) << setfill(' ') << "Count" << " | ";
-                cout << left << setw(12) << setfill(' ') << "User Rating" << "|" << "\n";
-                cout << setw(7+48+13+5+12+15) << setfill('-') << "-" << "\n";
-                
-                for(int i = 0; i < ratings_vector.size() and i < 20; i++){
-                    Player *player_buffer = player_hash.search(ratings_vector.at(i).player_id);
+                // Tests if the given user is present in the players.csv
+                if(ratings_vector.size() !=  0){
+                    cout << "\n";
+                    cout << setw(7+48+13+5+12+15) << setfill('-') << "-" << "\n";
+                    cout << "| " << setw(7) << setfill(' ') << "User ID" << " | ";
+                    cout << left << setw(48) << setfill(' ') << "Full Name" << " | ";
+                    cout << left << setw(13) << setfill(' ') << "Global Rating" << " | ";
+                    cout << left << setw(5) << setfill(' ') << "Count" << " | ";
+                    cout << left << setw(12) << setfill(' ') << "User Rating" << "|" << "\n";
+                    cout << setw(7+48+13+5+12+15) << setfill('-') << "-" << "\n";
                     
-                    cout << "| " << right << setw(7) << setfill(' ') << player_buffer->getId() << " | ";
-                    cout << left << setw(48) << setfill(' ') << player_buffer->getName() << " | ";
-                    cout << right << setw(13) << setfill(' ') << player_buffer->getRating() << " | ";
-                    cout << right << setw(5) << setfill(' ') << player_buffer->getCount() << " | ";
-                    cout << right << setw(12) << setfill(' ') << ratings_vector.at(i).player_rating << "|\n";
+                    for(int i = 0; i < ratings_vector.size() and i < 20; i++){
+                        Player *player_buffer = player_hash.search(ratings_vector.at(i).player_id);
+                        
+                        cout << "| " << right << setw(7) << setfill(' ') << player_buffer->getId() << " | ";
+                        cout << left << setw(48) << setfill(' ') << player_buffer->getName() << " | ";
+                        cout << right << setw(13) << setfill(' ') << player_buffer->getRating() << " | ";
+                        cout << right << setw(5) << setfill(' ') << player_buffer->getCount() << " | ";
+                        cout << right << setw(12) << setfill(' ') << ratings_vector.at(i).player_rating << "|\n";
+                    }
+                    cout << setw(7+48+13+5+12+15) << setfill('-') << "-" << "\n\n";
                 }
-                cout << setw(7+48+13+5+12+15) << setfill('-') << "-" << "\n\n";
+                else{
+                    cout << "Invalid user ID!\n" << endl;
+                }
             }
             else{
-                cout << "Informe um ID de usuario valido!\n" << endl;
+                cout << "Invalid user ID!\n" << endl;
             }
         }
+        else if(!(input_string.substr(0, 3).compare("top"))){
+            int n, key;
+            vector<TopRatedPlayers> sorted_vector;
+            string input_positions;       
+            string buffer_n;
+            stringstream buffer_stream(input_string.substr(3));
+             
+            getline(buffer_stream, buffer_n, ' ');            
+            n = stoi(buffer_n);
+            input_positions = input_string.substr(3 + buffer_n.size() + 1);
+
+            top_positions.getRatings(input_positions, player_hash);           
+
+            sorted_vector = top_positions.getRatedPlayerVector(input_positions);
+
+            cout << "\n";
+            cout << setw(9+48+13+7+6+15) << setfill('-') << "-" << "\n";
+            cout << "| " << setw(9) << setfill(' ') << "Player ID" << " | ";
+            cout << left << setw(48) << setfill(' ') << "Full Name" << " | ";
+            cout << left << setw(13) << setfill(' ') << "Positions" << " | ";
+            cout << left << setw(7) << setfill(' ') << "Rating" << " | ";
+            cout << left << setw(6) << setfill(' ') << "Count" << "|" << "\n";
+            cout << setw(9+48+13+7+6+15) << setfill('-') << "-" << "\n";
+
+            /* Todo:
+                    - Arrumar quando count < 1000
+                    - Arrumar a leitura da posição
+                    - Validação de Posição
+            */
+            for(int i = 0; i < n; i++){
+                Player *buffer = player_hash.search(sorted_vector[i].player_id);
+                if(buffer->getCount() > 1000){
+                    cout << "| " << right << setw(9) << setfill(' ') << sorted_vector[i].player_id << " | ";
+                    cout << left << setw(48) << setfill(' ') << buffer->getName() << " | ";
+                    cout << left << setw(13) << setfill(' ') << buffer->getPositions() << " | ";
+                    cout << right << setw(7) << setfill(' ') << buffer->getRating() << " | ";
+                    cout << right << setw(6) << setfill(' ') << buffer->getCount() << "|" << "\n";
+                }
+            }
+            cout << setw(9+48+13+7+6+15) << setfill('-') << "-" << "\n" << endl;
+
+        }
         else{
-            cout << "Informe uma pesquisa valida!\n" << endl;
+            cout << "Invalid search!\n" << endl;
         }
 
-        cout << "Insira a busca a ser feita: ";
+        cout << "Insert your search: ";
         getline(cin, input_string, '\n');
     }
     return 0;
