@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include <ctime>
 #include <fstream>
 #include <string>
@@ -196,10 +197,6 @@ int main(void){
 
         else if(!(input_string.substr(0, 3).compare("top"))){
 
-            /* To-do:
-                - Arrumar a leitura da posição / perguntar pro Comba se pode ser assim
-            */
-
             int n, key;
             vector<TopRatedPlayers> sorted_vector;
             string input_positions;       
@@ -210,12 +207,13 @@ int main(void){
             // Checks if what comes after "top" is actually a representable integer 
             if(buffer_n.find_first_not_of("0123456789") == std::string::npos and buffer_n.size() < 10 and buffer_n.size() > 0){    
                 n = stoi(buffer_n);
-                input_positions = input_string.substr(3 + buffer_n.size() + 1);
-
+                input_positions = input_string.substr(3 + buffer_n.size());
+                input_positions.erase(remove(input_positions.begin(), input_positions.end(), ' '), input_positions.end());
+                input_positions.erase(remove(input_positions.begin(), input_positions.end(), '\''), input_positions.end());
                 // Checks if the given player position is valid or not
                 if(top_positions.checkPositions(input_positions)){
 
-                    top_positions.getRatings(input_positions, player_hash);           
+                    top_positions.sortRatings(input_positions, player_hash, true);           
 
                     sorted_vector = top_positions.getRatedPlayerVector(input_positions);
 
@@ -228,7 +226,61 @@ int main(void){
                     cout << left << setw(6) << setfill(' ') << "Count" << "|" << "\n";
                     cout << setw(9+48+13+7+6+15) << setfill('-') << "-" << "\n";
 
-                    for(int i = 0; i < n; i++){
+                    for(int i = 0; i < n and i < sorted_vector.size(); i++){
+                        Player *buffer = player_hash.search(sorted_vector[i].player_id);
+                        if(buffer->getCount() > 1000){
+                            cout << "| " << right << setw(9) << setfill(' ') << sorted_vector[i].player_id << " | ";
+                            cout << left << setw(48) << setfill(' ') << buffer->getName() << " | ";
+                            cout << left << setw(13) << setfill(' ') << buffer->getPositions() << " | ";
+                            cout << right << setw(7) << setfill(' ') << buffer->getRating() << " | ";
+                            cout << right << setw(6) << setfill(' ') << buffer->getCount() << "|" << "\n";
+                        }
+                        else{
+                            n++;
+                        }
+                    }
+                    cout << setw(9+48+13+7+6+15) << setfill('-') << "-" << "\n" << endl;
+                }
+                else{
+                    cout << "Invalid player position!\n" << endl;
+                }
+            }
+            else{
+                cout << "Invalid top number!\n" << endl;
+            }
+        }
+
+        else if(!(input_string.substr(0, 6).compare("bottom"))){
+            int n, key;
+            vector<TopRatedPlayers> sorted_vector;
+            string input_positions;       
+            string buffer_n{0};
+            stringstream buffer_stream(input_string.substr(6));
+             
+            getline(buffer_stream, buffer_n, ' ');
+            // Checks if what comes after "bottom" is actually a representable integer 
+            if(buffer_n.find_first_not_of("0123456789") == std::string::npos and buffer_n.size() < 10 and buffer_n.size() > 0){    
+                n = stoi(buffer_n);
+                input_positions = input_string.substr(6 + buffer_n.size() + 1);
+                input_positions.erase(remove(input_positions.begin(), input_positions.end(), ' '), input_positions.end());
+                input_positions.erase(remove(input_positions.begin(), input_positions.end(), '\''), input_positions.end());
+                // Checks if the given player position is valid or not
+                if(top_positions.checkPositions(input_positions)){
+
+                    top_positions.sortRatings(input_positions, player_hash, false);           
+
+                    sorted_vector = top_positions.getRatedPlayerVector(input_positions);
+
+                    cout << "\n";
+                    cout << setw(9+48+13+7+6+15) << setfill('-') << "-" << "\n";
+                    cout << "| " << setw(9) << setfill(' ') << "Player ID" << " | ";
+                    cout << left << setw(48) << setfill(' ') << "Full Name" << " | ";
+                    cout << left << setw(13) << setfill(' ') << "Positions" << " | ";
+                    cout << left << setw(7) << setfill(' ') << "Rating" << " | ";
+                    cout << left << setw(6) << setfill(' ') << "Count" << "|" << "\n";
+                    cout << setw(9+48+13+7+6+15) << setfill('-') << "-" << "\n";
+
+                    for(int i = 0; i < n and i < sorted_vector.size(); i++){
                         Player *buffer = player_hash.search(sorted_vector[i].player_id);
                         if(buffer->getCount() > 1000){
                             cout << "| " << right << setw(9) << setfill(' ') << sorted_vector[i].player_id << " | ";

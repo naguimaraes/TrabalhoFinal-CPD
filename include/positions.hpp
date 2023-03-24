@@ -24,13 +24,14 @@ private:
                             "LW", "RF",	"CF", "LF",	"ST"};
 
     int getKey(string player_position);
+    int partitionDescending(int left, int right, int positions);
+    int partitionAscending(int left, int right, int positions);
+    void sortTopPlayersVector(int left, int right, int positions, bool isDescending);
 
 public:
     
     void insert(string player_id, string positions);
-    int partition(int left, int right, int positions);
-    void sortTopPlayersVector(int left, int right, int positions);
-    void getRatings(string position, HashPlayer player_hash);
+    void sortRatings(string position, HashPlayer player_hash, bool isDescending);
     vector<TopRatedPlayers> getRatedPlayerVector(string position);
     bool checkPositions(string position);
     Positions();

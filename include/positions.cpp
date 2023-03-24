@@ -32,7 +32,7 @@ void Positions::insert(string player_id, string positions){
     };
 }
 
-int Positions::partition(int left, int right, int position){
+int Positions::partitionDescending(int left, int right, int position){
     int i, j;
     TopRatedPlayers key;
     key = top_positions_vector[position][left];
@@ -53,17 +53,46 @@ int Positions::partition(int left, int right, int position){
     top_positions_vector[position][j] = key;
 
     return i;
+}
 
+int Positions::partitionAscending(int left, int right, int position){
+    int i, j;
+    TopRatedPlayers key;
+    key = top_positions_vector[position][left];
+    i = left; 
+    j = right;
+
+    while (i<j) {
+        while(top_positions_vector[position][j].player_rating > key.player_rating && i < j) j--;
+        {
+            top_positions_vector[position][i] = top_positions_vector[position][j];
+        }
+        while(top_positions_vector[position][i].player_rating <= key.player_rating && i < j) i++ ;
+        {
+            top_positions_vector[position][j] = top_positions_vector[position][i];
+        }
+    }
+
+    top_positions_vector[position][j] = key;
+
+    return i;
 }
 
 
 
-void Positions::sortTopPlayersVector(int left, int right, int position){
+void Positions::sortTopPlayersVector(int left, int right, int position, bool isDescending){
     if (left < right) {   
-        int pi = partition(left, right, position);
-  
-        sortTopPlayersVector(left, pi - 1, position);
-        sortTopPlayersVector(pi + 1, right, position);
+        int pi;
+
+        if(isDescending){
+            pi = partitionDescending(left, right, isDescending);
+        }
+        else{
+            pi = partitionAscending(left, right, isDescending);
+        }
+
+        sortTopPlayersVector(left, pi - 1, position, isDescending);
+        sortTopPlayersVector(pi + 1, right, position, isDescending);
     }
 }
 
@@ -74,14 +103,14 @@ Positions::Positions(){
     }
 }
 
-void Positions::getRatings(string position, HashPlayer player_hash){
+void Positions::sortRatings(string position, HashPlayer player_hash, bool isDescending){
     int key = getKey(position);
 
     for(int i = 0; i < top_positions_vector[key].size(); i++){
         top_positions_vector[key][i].player_rating = player_hash.search(top_positions_vector[key][i].player_id)->getRating();
     }
     
-    sortTopPlayersVector(0, top_positions_vector[key].size()-1, key);
+    sortTopPlayersVector(0, top_positions_vector[key].size()-1, key, isDescending);
 }
 
 vector<TopRatedPlayers> Positions::getRatedPlayerVector(string position)
