@@ -4,9 +4,9 @@
 #include "hashtable.hpp"
 using std::to_string;
 
-int HashTable::getKey(int id, int size){
+int HashPlayer::getKey(string id, int size){
     
-    string s = to_string(id);
+    string s = id;
 
     long long int hash_key = 0;
     int a = 3;
@@ -19,13 +19,30 @@ int HashTable::getKey(int id, int size){
 
     return hash_key;
 }
-void HashPlayer::insert(Player player){
-    int key = getKey(player.getId(), to_string(player.getId()).size());
+
+int HashUser::getKey(string id, int size){
+    
+    string s = id;
+
+    long long int hash_key = 0;
+    int a = 31;
+
+    for(int i = 0; i < size; i++){
+        hash_key += s[i] * pow(a, i);
+    }
+        
+    hash_key %= HASH_SIZE;
+
+    return hash_key;
+}
+void HashPlayer::insert(Player player)
+{
+    int key = getKey(player.getId(), player.getId().size());
     hash_table[key].push_back(player);        
 }
 
-Player* HashPlayer::search(int id){
-    int size = to_string(id).size();
+Player* HashPlayer::search(string id){
+    int size = id.size();
     int key = getKey(id, size);
 
     for(int i = 0; i < hash_table[key].size(); i++){
@@ -36,7 +53,6 @@ Player* HashPlayer::search(int id){
     return NULL;    
 }
 
-// Preenche a hash com vetores vazios
 HashPlayer::HashPlayer(){
     for(int i = 0; i < HASH_SIZE ; i++){
         hash_table.push_back(vector<Player>());
@@ -44,7 +60,7 @@ HashPlayer::HashPlayer(){
 }
 
 void HashUser::insert(User user){
-    int key = getKey(user.getId(), to_string(user.getId()).size());
+    int key = getKey(user.getId(), user.getId().size());
 
     for(int i = 0; i < hash_table[key].size(); i++)
     {
@@ -58,8 +74,8 @@ void HashUser::insert(User user){
     hash_table[key].push_back(user);
 }
 
-User* HashUser::search(int id){
-    int size = to_string(id).size();
+User* HashUser::search(string id){
+    int size = id.size();
     int key = getKey(id, size);
 
     for(int i = 0; i < hash_table[key].size(); i++){
