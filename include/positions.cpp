@@ -38,7 +38,6 @@ int Positions::partitionDescending(int left, int right, int position){
     key = top_positions_vector[position][left];
     i = left; 
     j = right;
-
     while (i<j) {
         while(top_positions_vector[position][j].player_rating < key.player_rating && i < j) j--;
         {
@@ -51,13 +50,13 @@ int Positions::partitionDescending(int left, int right, int position){
     }
 
     top_positions_vector[position][j] = key;
-
     return i;
 }
 
 int Positions::partitionAscending(int left, int right, int position){
     int i, j;
     TopRatedPlayers key;
+
     key = top_positions_vector[position][left];
     i = left; 
     j = right;
@@ -83,7 +82,6 @@ int Positions::partitionAscending(int left, int right, int position){
 void Positions::sortTopPlayersVector(int left, int right, int position, bool isDescending){
     if (left < right) {   
         int pi;
-
         if(isDescending){
             pi = partitionDescending(left, right, isDescending);
         }
@@ -109,7 +107,7 @@ void Positions::sortRatings(string position, HashPlayer player_hash, bool isDesc
     for(int i = 0; i < top_positions_vector[key].size(); i++){
         top_positions_vector[key][i].player_rating = player_hash.search(top_positions_vector[key][i].player_id)->getRating();
     }
-    
+
     sortTopPlayersVector(0, top_positions_vector[key].size()-1, key, isDescending);
 }
 

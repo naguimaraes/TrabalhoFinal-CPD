@@ -12,26 +12,22 @@ const int ALPHABET_SIZE = 91;
 typedef struct sTrieNode
 {
     struct sTrieNode *children[ALPHABET_SIZE];
-    int id;
+    vector<int> id_vector;
 }TrieNode;
 
 class Trie{
 private:
     TrieNode *root;
-
     TrieNode *getNode(void);
-
+    int partition(vector<int> &v, int left, int right);
+    void sort(vector<int> &v, int left, int right);
 public:
     Trie();
-    vector<int> vector_id;
-
-    // Inserts the given name in the Trie, using the player's ID as its leaf flag.
+    vector<int> print_vector;
     void insert(string name, int id);
-
-    // Returns the ID of the given player name, if it's stored in the Trie. If it isn't, returns "-1". 
-    int search(string name);
-
     void searchPrefix(string prefix);
+    vector<int> findIntersection(int tags_number);
+    void removeDuplicates(string str);
 }; 
 
 #endif

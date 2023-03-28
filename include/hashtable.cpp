@@ -4,31 +4,17 @@
 #include "hashtable.hpp"
 using std::to_string;
 
-int HashPlayer::getKey(string id, int size){
-    
-    string s = id;
-
-    long long int hash_key = 0;
-    int a = 3;
-
-    for(int i = 0; i < size; i++){
-        hash_key += s[i] * pow(a, i);
+HashPlayer::HashPlayer(){
+    for(int i = 0; i < HASH_SIZE ; i++){
+        hash_table.push_back(vector<Player>());
     }
-        
-    hash_key %= HASH_SIZE;
-
-    return hash_key;
 }
-
-int HashUser::getKey(string id, int size){
-    
-    string s = id;
-
+int HashPlayer::getKey(string id, int size){
     long long int hash_key = 0;
     int a = 31;
 
     for(int i = 0; i < size; i++){
-        hash_key += s[i] * pow(a, i);
+        hash_key += id[i] * pow(a, i);
     }
         
     hash_key %= HASH_SIZE;
@@ -40,7 +26,6 @@ void HashPlayer::insert(Player player)
     int key = getKey(player.getId(), player.getId().size());
     hash_table[key].push_back(player);        
 }
-
 Player* HashPlayer::search(string id){
     int size = id.size();
     int key = getKey(id, size);
@@ -53,12 +38,25 @@ Player* HashPlayer::search(string id){
     return NULL;    
 }
 
-HashPlayer::HashPlayer(){
+
+
+HashUser::HashUser(){
     for(int i = 0; i < HASH_SIZE ; i++){
-        hash_table.push_back(vector<Player>());
+        hash_table.push_back(vector<User>());
     }
 }
+int HashUser::getKey(string id, int size){
+    long long int hash_key = 0;
+    int a = 31;
 
+    for(int i = 0; i < size; i++){
+        hash_key += id[i] * pow(a, i);
+    }
+        
+    hash_key %= HASH_SIZE;
+
+    return hash_key;
+}
 void HashUser::insert(User user){
     int key = getKey(user.getId(), user.getId().size());
 
@@ -73,7 +71,6 @@ void HashUser::insert(User user){
     user.insertRatedPlayer(user.getRatedPlayerBuffer());
     hash_table[key].push_back(user);
 }
-
 User* HashUser::search(string id){
     int size = id.size();
     int key = getKey(id, size);
@@ -84,10 +81,4 @@ User* HashUser::search(string id){
     }
 
     return NULL;    
-}
-
-HashUser::HashUser(){
-    for(int i = 0; i < HASH_SIZE ; i++){
-        hash_table.push_back(vector<User>());
-    }
 }
