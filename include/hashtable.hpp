@@ -17,11 +17,11 @@ protected:
 class HashPlayer: public HashTable{
 private:
     vector<vector<Player>> hash_table;
-    const int HASH_SIZE = 28416;
+    const int HASH_SIZE = 1.5*18944;
+    int getKey(string id, int size);
 public:
     void insert(Player player);
     Player* search(string id);
-    int getKey(string id, int size);
     HashPlayer();
 };
 
@@ -31,10 +31,10 @@ class HashUser: public HashTable{
 private:
     vector<vector<User>> hash_table;
     const int HASH_SIZE = 1.3*24188078;
+    int getKey(string id, int size);
 public:
     void insert(User user);
     User* search(string id);
-    int getKey(string id, int size);
     HashUser();
 };
 
