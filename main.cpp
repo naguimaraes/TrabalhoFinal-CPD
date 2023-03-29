@@ -27,7 +27,7 @@ int main(void){
     Trie tags_trie;
     Positions top_positions;
     ifstream players_file("data/players.csv");
-    ifstream ratings_file("data/minirating.csv");
+    ifstream ratings_file("data/rating.csv");
     ifstream tags_file("data/tags.csv");
     CsvParser parser_players(players_file);
     CsvParser parser_ratings(ratings_file);
@@ -58,7 +58,6 @@ int main(void){
     cout << "Building player hash and player trie...\n\n";
 
     for (auto& row : parser_players) {
-        int i = 0;
         Player buffer;
         string buffer_surname;
         for (auto& field : row) {
@@ -82,15 +81,13 @@ int main(void){
         player_trie.insert(buffer.getName(), stoi(buffer.getId()));
 
         istringstream buffer_stream(buffer.getName());
+        buffer_stream >> buffer_surname;
         while(buffer_stream >> buffer_surname){
-            if(i != 0){
-                surname_trie.insert(buffer_surname, stoi(buffer.getId()));
-            }
-            i++;
+            surname_trie.insert(buffer_surname, stoi(buffer.getId()));
         }
     }
 
-    cout << "Player hash and player trie done!\n\n";
+    cout << "Player hash, player trie and surname trie done!\n\n";
 
     
     // Loop to read rating.csv
@@ -156,7 +153,7 @@ int main(void){
         tags_trie.insert(buffer_tag, stoi(buffer_id));
     }
 
-    cout << "Tags hash trie!\n\n"; 
+    cout << "Tags trie done!\n\n"; 
 
 
     timer = clock() - timer;
@@ -253,7 +250,7 @@ int main(void){
                 // Checks if the given player position is valid or not
                 if(top_positions.checkPositions(input_positions)){
 
-                    top_positions.sortRatings(input_positions, player_hash, true);           
+                    top_positions.getRatings(input_positions, player_hash);           
                     sorted_vector = top_positions.getRatedPlayerVector(input_positions);
 
                     cout << "\n";
@@ -306,7 +303,7 @@ int main(void){
                 // Checks if the given player position is valid or not
                 if(top_positions.checkPositions(input_positions)){
 
-                    top_positions.sortRatings(input_positions, player_hash, false);           
+                    top_positions.getRatings(input_positions, player_hash);           
 
                     sorted_vector = top_positions.getRatedPlayerVector(input_positions);
 
@@ -319,7 +316,7 @@ int main(void){
                     cout << left << setw(6) << setfill(' ') << "Count" << "|" << "\n";
                     cout << setw(9+48+13+7+6+15) << setfill('-') << "-" << "\n";
 
-                    for(int i = 0; i < n and i < sorted_vector.size(); i++){
+                    for(int i = sorted_vector.size()-1; i > (sorted_vector.size() - 1 - n)and i > 0; i--){
                         Player *buffer = player_hash.search(sorted_vector[i].player_id);
                         if(buffer->getCount() > 1000){
                             cout << "| " << right << setw(9) << setfill(' ') << sorted_vector[i].player_id << " | ";
@@ -348,6 +345,7 @@ int main(void){
             string buffer_string;
             vector<string> tags_vector;
             vector<int> intersection_vector;
+            bool invalid_tag = false;
             while(getline(buffer_stream, buffer_string, '\'')){
                 if((buffer_string.compare(" "))){
                     tags_vector.push_back(buffer_string);
@@ -356,32 +354,39 @@ int main(void){
 
             } 
             for(int i = 0; i < tags_vector.size(); i++){
-                tags_trie.searchPrefix(tags_vector[i]);
+                if(tags_trie.search(tags_vector[i]) == -1){
+                    invalid_tag = true;
+                }  
             }
-            intersection_vector = tags_trie.findIntersection(tags_vector.size());
-            if(intersection_vector.size() == 0){
-                cout << "No player matches the given tags!\n" << endl;
+            if(!invalid_tag){
+                intersection_vector = tags_trie.findIntersection(tags_vector.size());
+                if(intersection_vector.size() == 0){
+                    cout << "No player matches the given tags!\n" << endl;
+                }
+                else{
+
+                    cout << "\n";
+                    cout << setw(9+48+13+7+6+15) << setfill('-') << "-" << "\n";
+                    cout << "| " << setw(9) << setfill(' ') << "Player ID" << " | ";
+                    cout << left << setw(48) << setfill(' ') << "Full Name" << " | ";
+                    cout << left << setw(13) << setfill(' ') << "Positions" << " | ";
+                    cout << left << setw(7) << setfill(' ') << "Rating" << " | ";
+                    cout << left << setw(6) << setfill(' ') << "Count" << "|" << "\n";
+                    cout << setw(9+48+13+7+6+15) << setfill('-') << "-" << "\n";
+                    for(int i = 0; i < intersection_vector.size(); i++){
+                        cout << "| " << right << setw(9) << setfill(' ') << intersection_vector[i] << " | ";
+                        cout << left << setw(48) << setfill(' ') << player_hash.search(to_string(intersection_vector[i]))->getName() << " | ";
+                        cout << left << setw(13) << setfill(' ') << player_hash.search(to_string(intersection_vector[i]))->getPositions() << " | ";
+                        cout << right << setw(7) << setfill(' ') << player_hash.search(to_string(intersection_vector[i]))->getRating() << " | ";
+                        cout << right << setw(6) << setfill(' ') << player_hash.search(to_string(intersection_vector[i]))->getCount() << "|" << "\n";
+                    }
+                    cout << setw(9+48+13+7+6+15) << setfill('-') << "-" << "\n" << endl;
+                }
             }
             else{
-
-                cout << "\n";
-                cout << setw(9+48+13+7+6+15) << setfill('-') << "-" << "\n";
-                cout << "| " << setw(9) << setfill(' ') << "Player ID" << " | ";
-                cout << left << setw(48) << setfill(' ') << "Full Name" << " | ";
-                cout << left << setw(13) << setfill(' ') << "Positions" << " | ";
-                cout << left << setw(7) << setfill(' ') << "Rating" << " | ";
-                cout << left << setw(6) << setfill(' ') << "Count" << "|" << "\n";
-                cout << setw(9+48+13+7+6+15) << setfill('-') << "-" << "\n";
-                for(int i = 0; i < intersection_vector.size(); i++){
-                    cout << "| " << right << setw(9) << setfill(' ') << intersection_vector[i] << " | ";
-                    cout << left << setw(48) << setfill(' ') << player_hash.search(to_string(intersection_vector[i]))->getName() << " | ";
-                    cout << left << setw(13) << setfill(' ') << player_hash.search(to_string(intersection_vector[i]))->getPositions() << " | ";
-                    cout << right << setw(7) << setfill(' ') << player_hash.search(to_string(intersection_vector[i]))->getRating() << " | ";
-                    cout << right << setw(6) << setfill(' ') << player_hash.search(to_string(intersection_vector[i]))->getCount() << "|" << "\n";
-                }
-                cout << setw(9+48+13+7+6+15) << setfill('-') << "-" << "\n" << endl;
-            }
-            tags_trie.print_vector.clear();        
+                cout << "Invalid tags!\n" << endl;  
+            }      
+            tags_trie.print_vector.clear();
         }
 
         else if(!(input_string.substr(0, 7).compare("surname"))){

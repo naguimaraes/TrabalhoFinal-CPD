@@ -100,6 +100,28 @@ void Trie::sort(vector<int> &v, int left, int right){
     }
 }
 
+int Trie::search(string name)
+{
+    TrieNode *pAux = root;
+    
+
+    for (int i = 0; i < name.length(); i++)
+    {
+        int index = name[i] - ' ';
+        if (!pAux->children[index]){
+            return -1;
+        }
+    
+        pAux = pAux->children[index];
+    }
+    
+    for(int i = 0; i < (pAux->id_vector.size()); i++){
+        print_vector.push_back(pAux->id_vector[i]);
+    }
+
+    return 0;  
+}
+
 vector<int> Trie::findIntersection(int tags_number){
     int count = 0;
     vector<int> intersection;

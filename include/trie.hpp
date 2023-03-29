@@ -28,6 +28,7 @@ public:
     void searchPrefix(string prefix);
     vector<int> findIntersection(int tags_number);
     void removeDuplicates(string str);
+    int search(string name);
 }; 
 
 #endif

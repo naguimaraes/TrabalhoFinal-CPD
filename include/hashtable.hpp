@@ -30,7 +30,7 @@ public:
 class HashUser: public HashTable{
 private:
     vector<vector<User>> hash_table;
-    const int HASH_SIZE = 1.5*24188078;
+    const int HASH_SIZE = 1.3*24188078;
     int getKey(string id, int size);
 public:
     void insert(User user);
