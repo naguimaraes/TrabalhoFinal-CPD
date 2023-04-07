@@ -1,4 +1,4 @@
-# **Trabalho Final - Classificação e Pesquisa de Dados (INF01124)**
+# **Classificação e Pesquisa de Dados (INF01124) - Trabalho Final**
 ## **Descrição**
 O trabalho consiste na implementação de certas estruturas de dados vistas em aulas para auxiliar e agilizar a pesquisa de jogadores dentro do dataset do FIFA 21, [aqui disponível](https://www.kaggle.com/stefanoleone992/fifa-21-complete-player-dataset). O código foi feito pelos alunos [Nathan Alonso](https://github.com/neitaans) e [João Vítor Schimuneck](https://github.com/jvhendrix), inteiramente na linguagem C++, levando aproximadamente 40 segundos para construir todas as estruturas.
 
@@ -159,4 +159,4 @@ Ou seja, ao todo, foram utilizadas:
 
 - 3 Árvores Trie;
 - 3 Tabelas Hash;
-- 1 Algoritmo de sorting, sendo ele o quicksort.
+- 1 Algoritmo de ordenamento, sendo ele o quicksort.
