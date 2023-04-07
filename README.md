@@ -87,8 +87,8 @@ Como entrada, o código recebe 3 arquivos do dataset, sendo eles:
 
 ### 4. Pesquisa por melhores jogadores
 
-- Sintaxe e modo de uso: `top<n> '<posição do jogador>'`.
-- Retorno: lista com os `n` melhores jogadores para a dada posição, ordenados pelas suas médias de avaliações.
+- Sintaxe e modo de uso: `top<N> '<posição do jogador>'`.
+- Retorno: lista com os `N` melhores jogadores para a dada posição, ordenados pelas suas médias de avaliações.
 - Exemplo:
 
 ```
