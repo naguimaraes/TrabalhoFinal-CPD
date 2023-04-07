@@ -4,9 +4,9 @@ O trabalho consiste na implementação de certas estruturas de dados vistas em a
 
 Como entrada, o código recebe 3 arquivos do dataset, sendo eles:
 
-1. `players.csv`: contém as informações sobre o ID, nome completo e posições de cada um dos quase 19 mil jogadores contidos no jogo;
-2. `rating.csv`: contém 24 milhões de avaliações de usuários, que podem atribuir uma nota de 0 a 5 para um jogador específico do jogo. Como este arquivo é muito pesado para o GitHub, ele não está disponível no repositório, mas pode ser baixado no site do dataset;
-3. `tags.csv`: contém 360 mil características atribuídas aos jogadores do jogo, para caracterizá-los.
+- `players.csv`: contém as informações sobre o ID, nome completo e posições de cada um dos quase 19 mil jogadores contidos no jogo;
+- `rating.csv`: contém 24 milhões de avaliações de usuários, que podem atribuir uma nota de 0 a 5 para um jogador específico do jogo. Como este arquivo é muito pesado para o GitHub, ele não está disponível no repositório, mas pode ser baixado no site do dataset;
+- `tags.csv`: contém 360 mil características atribuídas aos jogadores do jogo, para caracterizá-los.
 
 ## **Pesquisas**
 
