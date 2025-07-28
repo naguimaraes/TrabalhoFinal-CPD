@@ -1,4 +1,4 @@
-# **Data Classification and Search (INF01124) - Final Project**
+# **Data Classification and Search Final Project - FIFA 21 Player Dataset Search**
 
 ## **Description**
 
