@@ -30,6 +30,12 @@ You can also clean the project by running:
    make clean
    ```
 
+## **Usage**
+
+While running the program, you will be prompted to enter a search command. The program will continue waiting for input until you type `exit` to terminate it. You can also promp `help` to see the available commands and their usage.
+
+The available searches are listed in the [section below](#available-searches). You can type them directly into the console. The search commands are case-sensitive, so make sure to use the correct case for the commands and arguments.
+
 ## **Available Searches**
 
 ### 1. Search by player name

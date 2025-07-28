@@ -11,12 +11,12 @@ OBJECTS = $(SOURCES:.cpp=.o)
 TARGET = main.exe
 
 $(TARGET): $(SOURCES)
-	$(CXX) $(CXXFLAGS) $(SOURCES) -o $(TARGET)
+	@$(CXX) $(CXXFLAGS) $(SOURCES) -o $(TARGET)
 
 clean:
-	rm -f $(TARGET) $(OBJECTS)
+	@rm -f $(TARGET) $(OBJECTS)
 
 run: $(TARGET)
-	./$(TARGET)
+	@./$(TARGET)
 
 .PHONY: clean run

@@ -168,7 +168,7 @@ int main(void){
     cout << "\nInsert your search: ";
     getline(cin, input_string, '\n');
 
-    while (input_string != "exit"){
+    while (true){
         if(!(input_string.substr(0, 6).compare("player"))){
             player_trie.searchPrefix(input_string.substr(7));
 
@@ -422,6 +422,23 @@ int main(void){
             }
 
             surname_trie.print_vector.clear();
+        }
+
+        else if(!(input_string.compare("help"))){
+            cout << "\nAvailable search commands:\n";
+            cout << "- player <name>: Search for players by name prefix\n";
+            cout << "- user <id>: Display ratings for a specific user ID\n";
+            cout << "- top <n> <position>: Show top N players for a position\n";
+            cout << "- bottom <n> <position>: Show bottom N players for a position\n";
+            cout << "- tags '<tag1>' '<tag2>' ...: Find players matching all given tags\n";
+            cout << "- surname <surname>: Search for players by surname prefix\n";
+            cout << "- help: Display this help message\n";
+            cout << "- exit: Exit the program\n" << endl;
+        }
+
+        else if(input_string == "exit"){
+            cout << "\nExiting the program...\n";
+            break;
         }
 
         else{
