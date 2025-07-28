@@ -1,0 +1,5 @@
+*.exe
+/aux-code/*.exe
+/include/*.exe
+*.o
+*.out

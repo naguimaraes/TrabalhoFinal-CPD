@@ -1,20 +1,42 @@
-# **Classificação e Pesquisa de Dados (INF01124) - Trabalho Final**
-## **Descrição**
-O trabalho consiste na implementação de certas estruturas de dados vistas em aulas para auxiliar e agilizar a pesquisa de jogadores dentro do dataset do FIFA 21, [aqui disponível](https://www.kaggle.com/stefanoleone992/fifa-21-complete-player-dataset). O código foi feito pelos alunos [Nathan Alonso](https://github.com/naguimaraes) e [João Vítor Schimuneck](https://github.com/jvhendrix), inteiramente na linguagem C++, levando aproximadamente 40 segundos para construir todas as estruturas.
+# **Data Classification and Search (INF01124) - Final Project**
 
-Como entrada, o código recebe 3 arquivos do dataset, sendo eles:
+## **Description**
 
-- `players.csv`: contém as informações sobre o ID, nome completo e posições de cada um dos quase 19 mil jogadores contidos no jogo;
-- `rating.csv`: contém 24 milhões de avaliações de usuários, que podem atribuir uma nota de 0 a 5 para um jogador específico do jogo. Como este arquivo é muito pesado para o GitHub, ele não está disponível no repositório, mas pode ser baixado no site do dataset;
-- `tags.csv`: contém 360 mil características atribuídas aos jogadores do jogo, para caracterizá-los.
+This project consists of implementing fast searches within the FIFA 21 players dataset, [available at Kaggle](https://www.kaggle.com/stefanoleone992/fifa-21-complete-player-dataset). The code was written by students [Nathan Alonso Guimarães](https://github.com/naguimaraes) and [João Vítor Schimuneck de Souza](https://github.com/jvhendrix), entirely in C++.
 
-## **Pesquisas**
+## **Project Building**
 
-### 1. Pesquisa por nome do jogador
+To build the project, follow these steps:
 
-- Sintaxe e modo de uso: `player <nome do jogador>` ou `player <iniciais do nome>`.
-- Retorno: lista com todos os jogadores cujo nome se iniciam com o argumento passado.
-- Exemplo:
+1. Clone or download the repository:
+   ```bash
+   git clone https://github.com/naguimaraes/INF01124-Final-Project.git
+   cd INF01124-Final-Project
+   ```
+
+2. Build the project using Make:
+   ```bash
+   make
+   ```
+3. Run the program:
+   ```bash
+   make run
+   # or 
+   ./main.exe
+    ```
+
+You can also clean the project by running:
+   ```bash
+   make clean
+   ```
+
+## **Available Searches**
+
+### 1. Search by player name
+
+- Syntax and usage: `player <player_name>` or `player <name_initials>`.
+- Return: a table with all players whose names start with the given argument.
+- Example:
 
 ```
 > player Cristiano
@@ -30,11 +52,11 @@ Como entrada, o código recebe 3 arquivos do dataset, sendo eles:
 ---------------------------------------------------------------------------------------------------
 ```
 
-### 2. Pesquisa por sobrenome do jogador
+### 2. Search by player surname
 
-- Sintaxe e modo de uso: `surname <sobrenome do jogador>` ou `surname <iniciais do sobrenome>`.
-- Retorno: lista com todos os jogadores que tenham pelo menos um dos sobrenomes se iniciando com o argumento passado.
-- Exemplo:
+- Syntax and usage: `surname <player_surname>` or `surname <surname_initials>`.
+- Return: a table with all players who have at least one surname starting with the given argument.
+- Example:
 
 ```
 > surname Messi
@@ -50,11 +72,11 @@ Como entrada, o código recebe 3 arquivos do dataset, sendo eles:
 ---------------------------------------------------------------------------------------------------
 ```
 
-### 3. Pesquisa por avaliação de usuário
+### 3. Search by user ratings
 
-- Sintaxe e modo de uso: `user <Número do usuário>`.
-- Retorno: lista com os 20 jogadores mais bem avaliados pelo dado usuário.
-- Exemplo:
+- Syntax and usage: `user <user_number>`.
+- Return: a table with the 20 highest-rated players by the given user.
+- Example:
 
 ```
 > user 2469
@@ -85,11 +107,11 @@ Como entrada, o código recebe 3 arquivos do dataset, sendo eles:
 -----------------------------------------------------------------------------------------------------
 ```
 
-### 4. Pesquisa por melhores jogadores
+### 4. Search for best players by position
 
-- Sintaxe e modo de uso: `top<N> '<posição do jogador>'`.
-- Retorno: lista com os `N` melhores jogadores para a dada posição, ordenados pelas suas médias de avaliações.
-- Exemplo:
+- Syntax and usage: `top<N> '<player_position>'`.
+- Return: a table with the `N` best players for the given position, ordered by their rating averages.
+- Example:
 
 ```
 > top5 'GK'
@@ -105,11 +127,11 @@ Como entrada, o código recebe 3 arquivos do dataset, sendo eles:
 ---------------------------------------------------------------------------------------------------
 ```
 
-### 5. Pesquisa por piores jogadores
+### 5. Search for worst players by position
 
-- Sintaxe e modo de uso: `bottom<N> '<posição do jogador>'`.
-- Retorno: lista com os `N` piores jogadores para a dada posição, ordenados pelas suas médias de avaliações.
-- Exemplo:
+- Syntax and usage: `bottom<N> '<player_position>'`.
+- Return: a table with the `N` worst players for the given position, ordered by their rating averages.
+- Example:
 
 ```
 > bottom5 'GK'
@@ -125,11 +147,11 @@ Como entrada, o código recebe 3 arquivos do dataset, sendo eles:
 ---------------------------------------------------------------------------------------------------
 ```
 
-### 6. Pesquisa por tags de jogadores
+### 6. Search by player tags
 
-- Sintaxe e modo de uso: `tags '<tag1>' '<tag2>' ... '<tagN>'`.
-- Retorno: lista com a intersecção de jogadores que contenham todas as dadas tags.
-- Exemplo:
+- Syntax and usage: `tags '<tag1>' '<tag2>' ... '<tagN>'`.
+- Return: a table with the intersection of players that contain all the given tags.
+- Example:
 
 ```
 > tags 'Brazil' 'Manchester City'
@@ -143,20 +165,51 @@ Como entrada, o código recebe 3 arquivos do dataset, sendo eles:
 ---------------------------------------------------------------------------------------------------
 ```
 
-## **Estruturas de dados utilizadas**
+## **Project File Structure**
 
-Para a realização da função de pesquisa `player`, foi montada uma **Árvore Trie**, que armazena o nome completo de todos os jogadores e guarda seus IDs nas folhas. Juntamente à árvore, foi necessária a implementação de uma **Tabela Hash**, que armazena todos os dados satélites dos jogadores e que usa como chave de pesquisa o ID do jogador. Assim, primeiro o nome dado é pesquisado dentro da árvore, retornando o ID do jogador. Este ID é usado na tabela para se obter os demais dados que serão impressos na tela.
+In root directory, you will find the following files:
+- `aux-codes/`: a directory containing a auxiliary code that was used in the project but is not included in `main.cpp`
+    - `maxsize.cpp`: a code to find the maximum size of a player's name in the dataset. It was used to correctly print the outputs in a table format with proper alignment
 
-Na função `surname`, também montamos uma **Árvore Trie**, que contém todos os sobrenomes existentes no jogo. Diferentemente da árvore da primeira pesquisa, suas folhas armazenam um vetor de IDs pois mais de um jogador pode conter o mesmo sobrenome. Assim, se pesquisa na árvore o sobrenome dado, e é retornado uma lista com todos os IDs de jogadores que contém esse nome. De forma análoga, os IDs são utilizados para fazer uma busca na mesma tabela da função `player`, afim de se imprimir os dados satélites.
+- `data/`: a directory containing the dataset files used in the project.
+    - `minirating.csv`: a smaller version of the original `rating.csv` file, made only to test the program faster
+    - `players_21.csv`: contains the full dataset information about the players in the game, including unused information such as players "body type" and "week foot" ratings
+    - `players.csv`: a smaller version of `players_21.csv`, that contains only information about the ID, full name, and positions of each of the nearly 19,000 players in the game
+    - `rating.csv`: contains 24 million user ratings, where users can assign a score from 0 to 5 to a specific player in the game
+    - `tags.csv`: contains 360,000 characteristics assigned to players in the game to characterize them.
 
-Já na função `user`, uma estratégia semelhante foi utilizada. Foi criada um **Tabela Hash** que utiliza como chave o número do usuário, e que armazena os dados satélites daquele usuário: os jogadores que ele avaliou e a nota que lhes foi dada. Portanto, assim que a pesquisa recebe o número do usuário, é feita uma busca na tabela, que retorna e imprime todos os daddos do usuário dado.
+- `include/`: a directory containing the implementation of the data structures used in the project
+    - `hashtable.cpp` and `hashtable.hpp`: implementation of the Hash Table data structure used to store player satellite data
+    - `parser.cpp` and `parser.hpp`: implementation of the CSV parser used to read the dataset files
+    - `players.cpp` and `players.hpp`: implementation of the Players class, which contains the data structure for storing player satellite data
+    - `positions.cpp` and `positions.hpp`: implementation of the Positions class, which contains the data structure for storing players by their positions
+    - `trie.cpp` and `trie.hpp`: implementation of the Trie Tree data structure used to store player names and surnames, as well as tags
+    - `user.cpp` and `user.hpp`: implementation of the User class, which contains the data structure for storing user ratings
 
-Na função `top` e `bottom`, criamos outra **Tabela Hash** que separa todos os jogadores em suas devidas posições. Portanto, a chave da tabela é justamente a posição do jogador. Assim, conseguimos vetores que contém dentro de si todos os jogadores para cada posição do jogo. Mas, antes de imprimir os dados, o vetor da posição dada é ordenado conforme a avaliação média dos jogadores, e seus dados satélites são novamente retirados da mesma tabela montada na função `players`.
+- `.gitignore`: a file that specifies which files and directories should be ignored by Git, such as compiled files and executables
 
-Por fim, na função `tags`, nos valemos de outra **Árvore Trie**, que guarda em suas folhas todos os IDs de jogadores que receberam a dada tag. Assim, é feita a pesquisa na árvore para todas as tags passadas para a função; é feita a intersecção delas, afim de se encontrar quais jogadores receberam ambas as tags; e, na hora de imprimir, os dados satélites são novamente retirados da tabela de jogadores.
+- `main.cpp`: the main file that runs the program and allows the user to perform searches
 
-Ou seja, ao todo, foram utilizadas:
+- `Makefile`: a file that contains the instructions to build and run the project using `make` and `make run`, respectively
 
-- 3 Árvores Trie;
-- 3 Tabelas Hash;
-- 1 Algoritmo de ordenamento, sendo ele o quicksort.
+- `README.md`: this file, containing project description and instructions.
+
+- `specifications.pdf`: a file, provided by our professor, that contains the specifications of the project and the requirements for the implementation, written in Portuguese
+
+## **Data Structures Used**
+
+For the `player` search function, a **Trie Tree** was built, which stores the full name of all players and keeps their IDs in the leaves. Along with the tree, it was necessary to implement a **Hash Table**, which stores all satellite data of the players and uses the player ID as the search key. Thus, first the given name is searched within the tree, returning the player's ID. This ID is used in the table to obtain the other data that will be printed on screen.
+
+In the `surname` function, we also built a **Trie Tree**, which contains all existing surnames in the game. Unlike the tree from the first search, its leaves store a vector of IDs since more than one player can contain the same surname. Thus, the given surname is searched in the tree, and a list with all IDs of players containing that name is returned. Similarly, the IDs are used to search in the same table from the `player` function, in order to print the satellite data.
+
+In the `user` function, a similar strategy was used. A **Hash Table** was created that uses the user number as a key, and stores that user's satellite data:
+
+In the `top` and `bottom` functions, we created another **Hash Table** that separates all players into their respective positions. Therefore, the table key is precisely the player's position. This way, we obtain vectors that contain all players for each position in the game. However, before printing the data, the vector for the given position is sorted according to the players' average ratings, and their satellite data is again retrieved from the same table built in the `players` function.
+
+Finally, in the `tags` function, we used another **Trie Tree**, which stores in its leaves all IDs of players who received the given tag. Thus, the tree is searched for all tags passed to the function; their intersection is performed to find which players received all the tags; and, when printing, the satellite data is again retrieved from the players table.
+
+In other words, we used the following data structures:
+
+- 3 Trie Trees;
+- 3 Hash Tables;
+- 1 Sorting algorithm, which is quicksort.
