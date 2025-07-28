@@ -26,9 +26,8 @@ Trie::Trie()
 void Trie::insert(string name, int id)
 {
     TrieNode *pAux = root;
-    int count = 0;
 
-    for (int i = 0; i < name.length(); i++){
+    for (size_t i = 0; i < name.length(); i++){
         int index = name[i] - ' ';
         if (!pAux->children[index]){
                 pAux->children[index] = getNode();
@@ -66,7 +65,7 @@ void Trie::searchPrefix(string prefix){
         }
     
         if(pAux->id_vector.size() > 0){
-            for(int i = 0; i < (pAux->id_vector.size()); i++){
+            for(size_t i = 0; i < (pAux->id_vector.size()); i++){
                 print_vector.push_back(pAux->id_vector[i]);
             }
         }
@@ -105,7 +104,7 @@ int Trie::search(string name)
     TrieNode *pAux = root;
     
 
-    for (int i = 0; i < name.length(); i++)
+    for (size_t i = 0; i < name.length(); i++)
     {
         int index = name[i] - ' ';
         if (!pAux->children[index]){
@@ -115,7 +114,7 @@ int Trie::search(string name)
         pAux = pAux->children[index];
     }
     
-    for(int i = 0; i < (pAux->id_vector.size()); i++){
+    for(size_t i = 0; i < (pAux->id_vector.size()); i++){
         print_vector.push_back(pAux->id_vector[i]);
     }
 
@@ -129,7 +128,7 @@ vector<int> Trie::findIntersection(int tags_number){
 
 
 
-    for(int i = 0; i < print_vector.size(); i++){
+    for(size_t i = 0; i < print_vector.size(); i++){
         if(print_vector[i] == print_vector[i+1]){
             count++;
         }
@@ -148,7 +147,7 @@ void Trie::removeDuplicates(string str){
     TrieNode *pAux = root;
     vector<int>::iterator it;
     
-    for (int i = 0; i < str.length(); i++)
+    for (size_t i = 0; i < str.length(); i++)
     {
         int index = str[i] - ' ';
         if (!pAux->children[index]){

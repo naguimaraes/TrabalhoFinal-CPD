@@ -30,7 +30,7 @@ Player* HashPlayer::search(string id){
     int size = id.size();
     int key = getKey(id, size);
 
-    for(int i = 0; i < hash_table[key].size(); i++){
+    for(size_t i = 0; i < hash_table[key].size(); i++){
         if(hash_table[key][i].getId() == id)
             return &hash_table[key][i];
     }
@@ -60,7 +60,7 @@ int HashUser::getKey(string id, int size){
 void HashUser::insert(User user){
     int key = getKey(user.getId(), user.getId().size());
 
-    for(int i = 0; i < hash_table[key].size(); i++)
+    for(size_t i = 0; i < hash_table[key].size(); i++)
     {
         if(hash_table[key].at(i).getId() == user.getId())
         {
@@ -75,7 +75,7 @@ User* HashUser::search(string id){
     int size = id.size();
     int key = getKey(id, size);
 
-    for(int i = 0; i < hash_table[key].size(); i++){
+    for(size_t i = 0; i < hash_table[key].size(); i++){
         if(hash_table[key][i].getId() == id)
             return &hash_table[key][i];
     }

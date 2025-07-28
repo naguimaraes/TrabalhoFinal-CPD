@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 #include <iomanip>
+#include <sstream>
 #include "include/positions.hpp"
 #include "include/parser.hpp"
 #include "include/player.hpp"
@@ -27,7 +28,7 @@ int main(void){
     Trie tags_trie;
     Positions top_positions;
     ifstream players_file("data/players.csv");
-    ifstream ratings_file("data/rating.csv");
+    ifstream ratings_file("data/minirating.csv");
     ifstream tags_file("data/tags.csv");
     CsvParser parser_players(players_file);
     CsvParser parser_ratings(ratings_file);
@@ -35,15 +36,21 @@ int main(void){
 
     // Loop to skip the CSV's headings
     for (auto& row : parser_players) {
-        for (auto& field : row){}
+        for (auto& field : row){
+            (void)field; // Suppress unused variable warning
+        }
         break;
     }
     for (auto& row : parser_ratings) {
-        for (auto& field : row){} 
+        for (auto& field : row){
+            (void)field; // Suppress unused variable warning
+        } 
         break;
     }
     for (auto& row : parser_tags) {
-        for (auto& field : row){}
+        for (auto& field : row){
+            (void)field; // Suppress unused variable warning
+        }
         break;
     }
 
@@ -177,7 +184,7 @@ int main(void){
                 cout << left << setw(7) << setfill(' ') << "Rating" << " | ";
                 cout << left << setw(7) << setfill(' ') << "Count" << "|" << "\n";
                 cout << setw(9+48+13+7+7+15) << setfill('-') << "-" << "\n";
-                for(int i = 0; i < player_trie.print_vector.size(); i++){
+                for(size_t i = 0; i < player_trie.print_vector.size(); i++){
                     cout << "| " << right << setw(9) << setfill(' ') << player_trie.print_vector[i] << " | ";
                     cout << left << setw(48) << setfill(' ') << player_hash.search(to_string(player_trie.print_vector[i]))->getName() << " | ";
                     cout << left << setw(13) << setfill(' ') << player_hash.search(to_string(player_trie.print_vector[i]))->getPositions() << " | ";
@@ -212,7 +219,7 @@ int main(void){
                     cout << left << setw(13) << setfill(' ') << "User Rating" << "|" << "\n";
                     cout << setw(7+48+13+5+13+15) << setfill('-') << "-" << "\n";
                     
-                    for(int i = 0; i < ratings_vector.size() and i < 20; i++){
+                    for(size_t i = 0; i < ratings_vector.size() and i < 20; i++){
                         Player *player_buffer = player_hash.search(ratings_vector.at(i).player_id);
                         
                         cout << "| " << right << setw(7) << setfill(' ') << player_buffer->getId() << " | ";
@@ -234,7 +241,7 @@ int main(void){
 
         else if(!(input_string.substr(0, 3).compare("top"))){
 
-            int n, key;
+            int n;
             vector<TopRatedPlayers> sorted_vector;
             string input_positions;       
             string buffer_n{0};
@@ -262,7 +269,7 @@ int main(void){
                     cout << left << setw(7) << setfill(' ') << "Count" << "|" << "\n";
                     cout << setw(9+48+13+7+7+15) << setfill('-') << "-" << "\n";
 
-                    for(int i = 0; i < n and i < sorted_vector.size(); i++){
+                    for(size_t i = 0; i < static_cast<size_t>(n) and i < sorted_vector.size(); i++){
                         Player *buffer = player_hash.search(sorted_vector[i].player_id);
                         if(buffer->getCount() > 1000){
                             cout << "| " << right << setw(9) << setfill(' ') << sorted_vector[i].player_id << " | ";
@@ -287,7 +294,7 @@ int main(void){
         }
 
         else if(!(input_string.substr(0, 6).compare("bottom"))){
-            int n, key;
+            int n;
             vector<TopRatedPlayers> sorted_vector;
             string input_positions;       
             string buffer_n{0};
@@ -316,7 +323,7 @@ int main(void){
                     cout << left << setw(7) << setfill(' ') << "Count" << "|" << "\n";
                     cout << setw(9+48+13+7+7+15) << setfill('-') << "-" << "\n";
 
-                    for(int i = sorted_vector.size()-1; i > (sorted_vector.size() - 1 - n)and i > 0; i--){
+                    for(int i = static_cast<int>(sorted_vector.size())-1; i >= 0 && i > static_cast<int>(sorted_vector.size() - 1 - n); i--){
                         Player *buffer = player_hash.search(sorted_vector[i].player_id);
                         if(buffer->getCount() > 1000){
                             cout << "| " << right << setw(9) << setfill(' ') << sorted_vector[i].player_id << " | ";
@@ -353,7 +360,7 @@ int main(void){
                 }
 
             } 
-            for(int i = 0; i < tags_vector.size(); i++){
+            for(size_t i = 0; i < tags_vector.size(); i++){
                 if(tags_trie.search(tags_vector[i]) == -1){
                     invalid_tag = true;
                 }  
@@ -373,7 +380,7 @@ int main(void){
                     cout << left << setw(7) << setfill(' ') << "Rating" << " | ";
                     cout << left << setw(7) << setfill(' ') << "Count" << "|" << "\n";
                     cout << setw(9+48+13+7+7+15) << setfill('-') << "-" << "\n";
-                    for(int i = 0; i < intersection_vector.size(); i++){
+                    for(size_t i = 0; i < intersection_vector.size(); i++){
                         cout << "| " << right << setw(9) << setfill(' ') << intersection_vector[i] << " | ";
                         cout << left << setw(48) << setfill(' ') << player_hash.search(to_string(intersection_vector[i]))->getName() << " | ";
                         cout << left << setw(13) << setfill(' ') << player_hash.search(to_string(intersection_vector[i]))->getPositions() << " | ";
@@ -404,7 +411,7 @@ int main(void){
                 cout << left << setw(7) << setfill(' ') << "Rating" << " | ";
                 cout << left << setw(7) << setfill(' ') << "Count" << "|" << "\n";
                 cout << setw(9+48+13+7+7+15) << setfill('-') << "-" << "\n";
-                for(int i = 0; i < surname_trie.print_vector.size(); i++){
+                for(size_t i = 0; i < surname_trie.print_vector.size(); i++){
                     cout << "| " << right << setw(9) << setfill(' ') << surname_trie.print_vector[i] << " | ";
                     cout << left << setw(48) << setfill(' ') << player_hash.search(to_string(surname_trie.print_vector[i]))->getName() << " | ";
                     cout << left << setw(13) << setfill(' ') << player_hash.search(to_string(surname_trie.print_vector[i]))->getPositions() << " | ";

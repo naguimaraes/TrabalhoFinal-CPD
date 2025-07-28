@@ -6,7 +6,7 @@
 using aria::csv::CsvParser;
 using namespace std;
 
-// Funcao pra descobrir qual o tamanho do maior nome no arquivo players.csv
+// Function to find the size of the longest name in the `players.csv` file
 int main(void){
 
     int max_size = 0;

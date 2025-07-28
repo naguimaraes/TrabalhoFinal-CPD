@@ -6,11 +6,11 @@
 
 int Positions::getKey(string player_position)
 {
-    for (int i = 0; i < positions.size(); i++)
+    for (size_t i = 0; i < positions.size(); i++)
     {
         if (positions.at(i) == player_position)
         {
-            return i;
+            return static_cast<int>(i);
         }     
     }
     return -1;
@@ -69,7 +69,7 @@ void Positions::sortTopPlayersVector(int left, int right, int position){
 
 
 Positions::Positions(){
-    for(int i = 0; i < positions.size() ; i++){
+    for(size_t i = 0; i < positions.size() ; i++){
         top_positions_vector.push_back(vector<TopRatedPlayers>());
     }
 }
@@ -85,7 +85,7 @@ vector<TopRatedPlayers> Positions::getRatedPlayerVector(string position)
 void Positions::getRatings(string position, HashPlayer player_hash){
     int key = getKey(position);
 
-    for(int i = 0; i < top_positions_vector[key].size(); i++){
+    for(size_t i = 0; i < top_positions_vector[key].size(); i++){
         top_positions_vector[key][i].player_rating = player_hash.search(top_positions_vector[key][i].player_id)->getRating();
     }
     
