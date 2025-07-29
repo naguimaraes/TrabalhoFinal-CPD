@@ -4,6 +4,8 @@
 
 This code was concieved as the final project for the Data Classification and Search class. The project consists of implementing fast searches within the FIFA 21 players dataset, [available at Kaggle](https://www.kaggle.com/stefanoleone992/fifa-21-complete-player-dataset). The code was written by students [Nathan Alonso Guimarães](https://github.com/naguimaraes) and [João Vítor Schimuneck de Souza](https://github.com/jvhendrix), entirely in C++.
 
+The project was originally conceived in March of 2023, but it has been updated in July of 2025 to be better documented in GitHub.
+
 ## **Project Building**
 
 To build the project, follow these steps:
