@@ -10,8 +10,8 @@ To build the project, follow these steps:
 
 1. Clone or download the repository:
    ```bash
-   git clone https://github.com/naguimaraes/INF01124-Final-Project.git
-   cd INF01124-Final-Project
+   git clone https://github.com/naguimaraes/data-classification-and-search.git
+   cd data-classification-and-search
    ```
 
 2. Build the project using Make:
