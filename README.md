@@ -1,8 +1,8 @@
-# **Data Classification and Search Final Project - FIFA 21 Player Dataset Search**
+# **Data Search in FIFA 21 Players Dataset**
 
 ## **Description**
 
-This project consists of implementing fast searches within the FIFA 21 players dataset, [available at Kaggle](https://www.kaggle.com/stefanoleone992/fifa-21-complete-player-dataset). The code was written by students [Nathan Alonso Guimarães](https://github.com/naguimaraes) and [João Vítor Schimuneck de Souza](https://github.com/jvhendrix), entirely in C++.
+This code was concieved as the final project for the Data Classification and Search class. The project consists of implementing fast searches within the FIFA 21 players dataset, [available at Kaggle](https://www.kaggle.com/stefanoleone992/fifa-21-complete-player-dataset). The code was written by students [Nathan Alonso Guimarães](https://github.com/naguimaraes) and [João Vítor Schimuneck de Souza](https://github.com/jvhendrix), entirely in C++.
 
 ## **Project Building**
 
